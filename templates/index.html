@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 50px; background-color: #f4f4f9; }
+        .dashboard-container { max-width: 500px; margin: 0 auto; padding: 30px; background: white; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); text-align: center; }
+        .security-badge { background-color: #d4edda; color: #155724; padding: 15px; border-radius: 6px; font-weight: bold; margin-bottom: 25px; border: 1px solid #c3e6cb; }
+        .security-badge span { font-size: 20px; vertical-align: middle; margin-right: 5px; }
+        .user-info { margin-bottom: 30px; color: #555; }
+        .action-group { display: flex; gap: 15px; justify-content: center; margin-top: 20px; }
+        .btn { padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; font-size: 15px; text-decoration: none; font-weight: bold; }
+        .btn-logout { background-color: #6c757d; color: white; }
+        .btn-logout:hover { background-color: #5a6268; }
+        .btn-delete { background-color: #dc3545; color: white; }
+        .btn-delete:hover { background-color: #bd2130; }
+        .flash-messages { margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+
+<div class="dashboard-container">
+    <!-- Real-time Banner Messaging -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-messages">
+          {% for category, message in messages %}
+            <p style="color: {{ 'green' if category == 'success' else 'red' }}">{{ message }}</p>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <!-- Secure Status Header -->
+    <div class="security-badge">
+        🛡️ Your account is fully secure.
+    </div>
+
+    <div class="user-info">
+        <p>Welcome back, <strong>{{ email }}</strong></p>
+        <p>All connected credit card metrics and transactional keys are fully tokenized and encrypted.</p>
+    </div>
+
+    <div class="action-group">
+        <!-- Secure Logout Link -->
+           <a href="{{ url_for('logout') }}" class="btn btn-logout"> Logout </a>
+
+        <!-- Destructive Post Action with Safety Intercept -->
+        <a href="{{ url_for('delete') }}"
+   class="btn btn-delete"
+   onclick="return confirmAccountDeletion();">
+    Delete Account
+</a>
+
+    </div>
+</div>
+
+<script>
+    function confirmAccountDeletion() {
+        return confirm("WARNING: Are you absolutely sure you want to delete your account? This action is permanent and cannot be undone.");
+    }
+</script>
+
+</body>
+</html>
